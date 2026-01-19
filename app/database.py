@@ -1,12 +1,15 @@
+import os
 from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, DeclarativeBase
 
-DATABASE_URL = "mysql+pymysql://root:Nothing%40777@localhost/login_otp_db"
+DATABASE_URL = os.getenv("DATABASE_URL")
 
+engine = create_engine(
+    DATABASE_URL,
+    pool_pre_ping=True
+)
 
+SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
 
-engine = create_engine(DATABASE_URL)
-SessionLocal = sessionmaker(bind=engine)
-
-Base = declarative_base()
+class Base(DeclarativeBase):
+    pass
